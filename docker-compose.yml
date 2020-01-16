@@ -1,0 +1,22 @@
+version: "3.2"
+services:
+  go-service:
+    build:
+      context: ./backend
+      dockerfile: ../docker/go/Dockerfile
+    # Keep it running.  
+    tty: true
+    # Map port 3001 on the host machine to port 8000 of the container.
+    ports:
+      - "5000:5000"
+
+  react:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/react/Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - go-service
+    volumes: # For webpack dev server to use our local files
+      - ./frontend:/usr/src/app
